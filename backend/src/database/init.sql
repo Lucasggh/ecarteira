@@ -1,0 +1,10 @@
+CREATE DATABASE ecarteira;
+
+\c;
+
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    cpf VARCHAR(20) UNIQUE NOT NULL,
+);
