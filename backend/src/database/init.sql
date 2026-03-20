@@ -7,4 +7,6 @@ CREATE TABLE usuarios (
     nome VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     cpf VARCHAR(20) UNIQUE NOT NULL,
+    endereco VARCHAR(255) NOT NULL,
+    nascimento DATE NOT NULL
 );

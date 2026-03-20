@@ -1,7 +1,9 @@
 import {Pool} from 'pg'
-
+import {dotenv} from 'dotenv'
+dotenv.config()
 const pool = new Pool({
-    user:'postgre',
+    user:process.env.PG_USER,
     host:'localhost',
-    database
+    database:'ecarteira',
+    password:process.env.PG_PASSWORD
 })
