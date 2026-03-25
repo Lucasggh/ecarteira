@@ -84,7 +84,7 @@ function Registrar() {
         </button>
         <div className="flex flex-col justify-center items-center">
           <p>Já tem uma conta?</p>
-          <button type="button" className="border-b-blue-950 border-b-2 hover:cursor-pointer flex-1" onClick={() => navigate("/Login")}>
+          <button type="button" className="border-b-blue-950 border-b-2 hover:cursor-pointer flex-1" onClick={() => navigate("/login")}>
             Realizar login
           </button>
         </div>
