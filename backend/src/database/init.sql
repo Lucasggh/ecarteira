@@ -2,11 +2,10 @@ CREATE DATABASE ecarteira;
 
 \c;
 
-CREATE TABLE usuarios (
+CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(50) NOT NULL,
+    name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     cpf VARCHAR(20) UNIQUE NOT NULL,
-    endereco VARCHAR(255) NOT NULL,
-    nascimento DATE NOT NULL
+    password VARCHAR(50) NOT NULL
 );
