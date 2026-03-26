@@ -1,32 +1,15 @@
-import { createUserModel } from "./model.js";
-import { isValidCPF } from "cnpj-cpf-validator";
-import isEmail from "validator/lib/isEmail.js";
+import { createUserModel, loginModel } from "./model.js";
 import bcrypt from "bcrypt";
+import { verifyScript } from "./verifyScript.js";
 
 export async function createUserService(dataBody) {
   try {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
     const { name, email, cpf, password } = dataBody;
-    if (!name || !email || !cpf || !password) {
-      throw new Error("Invalid credentials");
-    }
-    if (!regex.test(password)) {
-      throw new Error("invalid password requisites");
-    }
-    if (!isEmail(email)) {
-      throw new Error("invalid credentials");
-    }
-    if (!isValidCPF(cpf)) {
-      throw new Error("invalid credentials");
-    }
+    verifyScript({ name, email, cpf, password });
     const hash = await bcrypt.hash(password, 10);
-    return await createUserModel({
-      email: email,
-      password: hash,
-      name: name,
-      cpf: cpf,
-    });
+    const user = await createUserModel({ password: hash, ...dataBody });
+    const { password: _, ...userSafe } = user;
+    return userSafe;
   } catch (err) {
     if (err.code === "23505") {
       throw new Error("User already exists");
@@ -35,5 +18,23 @@ export async function createUserService(dataBody) {
       throw err;
     }
     throw new Error("Internal server error");
+  }
+}
+
+export async function loginService(dataBody) {
+  try {
+    const { email, password } = dataBody;
+    const user = await loginModel(email);
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      throw new Error("invalid password");
+    }
+    const { password: _, ...userSafe } = user;
+    return userSafe;
+  } catch (err) {
+    if (err.errorId == 1) {
+      throw err;
+    }
+    throw new Error("Server error");
   }
 }

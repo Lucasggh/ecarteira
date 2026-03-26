@@ -1,5 +1,6 @@
 
-import { createUserService } from "./services.js";
+import { message } from "statuses";
+import { createUserService, loginService } from "./services.js";
 
 export async function createUserController(req,res) {
     try{
@@ -16,3 +17,14 @@ export async function createUserController(req,res) {
         })
     }
 }
+export async function loginController(req,res) {
+    try{
+        const user = await loginService(req.body)
+        res.status(200).json({
+            message:"user"
+        })
+    }catch(err){
+        throw err
+    }
+}
+ 
