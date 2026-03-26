@@ -9,7 +9,7 @@ async function setupDatabase() {
           name VARCHAR(50) NOT NULL,
           email VARCHAR(100) UNIQUE NOT NULL,
           cpf VARCHAR(20) UNIQUE NOT NULL,
-          password VARCHAR(50) NOT NULL
+          password TEXT NOT NULL
       );
     `);
     console.log("Tabela 'users' verificada/criada com sucesso!");
