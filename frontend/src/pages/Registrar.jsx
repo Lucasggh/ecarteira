@@ -3,6 +3,10 @@ import { isValidCPF } from "cnpj-cpf-validator";
 import isEmail from "validator/lib/isEmail";
 import InputForm from "../Components/Input";
 import { useNavigate } from "react-router";
+import axios from "axios"
+const api = axios.create({
+  baseURL:"http://localhost:3067/api"
+})
 function Registrar() {
   const navigate = useNavigate()
   const {
@@ -12,8 +16,18 @@ function Registrar() {
     formState: { errors },
   } = useForm();
 
-  const onsubmit = (data) => {
-    console.log(data);
+  async function onsubmit (data) {
+    const response = await api.post("/register",
+      {
+        name:data.name,
+        email:data.email,
+        cpf:data.cpf,
+        password:data.password
+    })
+    console.log(response.data)
+    console.log(response.status)
+    console.log(response.headers)
+
   };
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-blue-950">
@@ -44,7 +58,7 @@ function Registrar() {
           ></input>
         </InputForm>
 
-        <InputForm label="Email: " name="cpf" error={errors.email?.message}>
+        <InputForm label="Email: " error={errors.email?.message}>
           <input
             type="text"
             className="bg-blue-300 rounded-sm flex-1 p-1 border-b-3 border-b-blue-900"
@@ -56,7 +70,7 @@ function Registrar() {
           ></input>
         </InputForm>
 
-        <InputForm label="Senha: " name="password" error={errors.senha?.message} info={            <p className="text-[13px] mt-1">
+        <InputForm label="Senha: " name="password" error={errors.password?.message} info={            <p className="text-[13px] mt-1">
               {" "}
               Senha deve contar 8+ caracteres, maiúscula, minúscula, número e
               especial(#@*&...).
@@ -64,7 +78,7 @@ function Registrar() {
           <input
             type="text"
             className="bg-blue-300 rounded-sm flex-1 p-1 border-b-3 border-b-blue-900"
-            {...register("senha", {
+            {...register("password", {
               required: "Senha é obrigatoria",
               pattern: {
                 value:

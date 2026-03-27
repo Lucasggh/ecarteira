@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.2",
+    "axios": "^1.13.6",
     "cnpj-cpf-validator": "^1.0.4",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
@@ -35,5 +36,5 @@
     "globals": "^17.4.0",
     "vite": "^8.0.1"
   },
-    "homepage": "https://lucasggh.github.io/ecarteira/"
+  "homepage": "https://lucasggh.github.io/ecarteira/"
 }

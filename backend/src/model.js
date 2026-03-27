@@ -11,6 +11,5 @@ export async function loginModel(email){
         error.errorId = 1
         throw error
     }
-    const user = res.rows[0]
-    return user;
+    return res.rows[0]
 }

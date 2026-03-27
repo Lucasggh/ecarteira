@@ -1,13 +1,13 @@
 import { createUserModel, loginModel } from "./model.js";
 import bcrypt from "bcrypt";
-import { verifyScript } from "./verifyScript.js";
+import { verifyLogin,verifyRegister } from "./verifyScript.js";
 
 export async function createUserService(dataBody) {
   try {
     const { name, email, cpf, password } = dataBody;
-    verifyScript({ name, email, cpf, password });
+    verifyRegister({ name, email, cpf, password });
     const hash = await bcrypt.hash(password, 10);
-    const user = await createUserModel({ password: hash, ...dataBody });
+    const user = await createUserModel({ ...dataBody, password: hash });
     const { password: _, ...userSafe } = user;
     return userSafe;
   } catch (err) {
@@ -23,7 +23,10 @@ export async function createUserService(dataBody) {
 
 export async function loginService(dataBody) {
   try {
-    const { email, password } = dataBody;
+    if(!dataBody) throw new Error("no data receive")
+    const { email,password} = dataBody;
+    verifyLogin({email,password})
+    console.log("passou verificaçao")
     const user = await loginModel(email);
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
@@ -32,9 +35,6 @@ export async function loginService(dataBody) {
     const { password: _, ...userSafe } = user;
     return userSafe;
   } catch (err) {
-    if (err.errorId == 1) {
-      throw err;
-    }
-    throw new Error("Server error");
+    throw err
   }
 }

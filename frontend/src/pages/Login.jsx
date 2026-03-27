@@ -1,8 +1,11 @@
 import { useForm } from "react-hook-form";
-import { isValidCPF } from "cnpj-cpf-validator";
+import axios from "axios"
 import isEmail from "validator/lib/isEmail";
 import InputForm from "../Components/Input";
 import { useNavigate } from "react-router";
+const api = axios.create({
+  baseURL:"http://localhost:3067/api"
+})
 function Login() {
     const navigate = useNavigate()
   const {
@@ -11,9 +14,18 @@ function Login() {
     formState: { errors },
   } = useForm();
 
-  const onsubmit = (data) => {
-    console.log(data);
-  };
+async function onsubmit(data) {
+  try {
+    const response = await api.post("/login", {
+      email: data.email,
+      password: data.password
+    });
+
+    console.log(response.data);
+  } catch (err) {
+    console.error(err);
+  }
+}
     return ( 
     <div className="min-h-screen flex flex-col items-center justify-center bg-blue-950">
       <form
@@ -32,12 +44,12 @@ function Login() {
           ></input>
         </InputForm>
 
-        <InputForm label="Senha: " name="password" error={errors.senha?.message}
+        <InputForm label="Senha: " error={errors.password?.message}
         >
           <input
             type="text"
             className="bg-blue-300 rounded-sm flex-1 p-1 border-b-3 border-b-blue-900"
-            {...register("senha", {
+            {...register("password", {
               required: "Senha é obrigatoria",
               pattern: {
                 value:

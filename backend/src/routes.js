@@ -1,9 +1,8 @@
 import { Router } from "express"
-import { createUserController } from "./controller.js"
-import { loginService } from "./services.js"
+import { createUserController, loginController } from "./controller.js"
 
 const routes = Router()
 
-routes.post("/user",createUserController)
-routes.get("/user",)
+routes.post("/register",createUserController)
+routes.post("/login",loginController)
 export default routes
