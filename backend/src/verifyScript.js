@@ -3,7 +3,7 @@ import { isValidCPF } from "cnpj-cpf-validator";
 import isEmail from "validator/lib/isEmail.js";
 const regex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/;
-export function verifyRegister({name,email,cpf,password}) {
+export function verifyRegister({name,email,cpf,password,role}) {
         
         if (!name || !email || !cpf || !password) {
           throw new Error("Invalid credentials");
@@ -16,6 +16,9 @@ export function verifyRegister({name,email,cpf,password}) {
         }
         if (!isValidCPF(cpf)) {
           throw new Error("invalid credentials");
+        }
+        if(!role || (role !== "user" && role !== "admin")){
+          throw new Error("invalid credentials")
         }
 }
 
