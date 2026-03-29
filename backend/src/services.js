@@ -25,7 +25,7 @@ export async function loginService(dataBody) {
   try {
     if(!dataBody) throw new Error("no data receive")
     const { email,password} = dataBody;
-    verifyLogin({email,password})
+    verifyLogin({email,password}) 
     console.log("passou verificaçao")
     const user = await loginModel(email);
     const valid = await bcrypt.compare(password, user.password);
@@ -34,7 +34,7 @@ export async function loginService(dataBody) {
     }
 
     const { password: _, ...userSafe } = user;
-    const token = jwt.sign({sub:userSafe.id,role:userSafe.role},process.env.JWT_SECRET,{expiresIn:"1h"})
+    const token = jwt.sign({sub:userSafe.id,role:userSafe.role},process.env.JWT_SECRET,{expiresIn:"1Mins"})
     const payload = {
       user:{
       id:userSafe.id,

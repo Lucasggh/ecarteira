@@ -30,80 +30,88 @@ function Registrar() {
 
   };
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-blue-950">
-      <form
-        onSubmit={handleSubmit(onsubmit)}
-        className="flex flex-col bg-blue-700 p-3 rounded-xl border-3 border-blue-900 gap-4 items-center w-[400px]"
+<div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f5f2]">
+  <form
+    onSubmit={handleSubmit(onsubmit)}
+    className="flex flex-col bg-[#ffffff] p-4 rounded-xl border border-[#e5ded8] gap-4 items-center w-[400px] shadow-md"
+  >
+    <InputForm label="Nome:" error={errors.name?.message} name="name">
+      <input
+        type="text"
+        {...register("name", { required: "Nome é obrigatório" })}
+        className="bg-[#f1ebe5] rounded-sm flex-1 p-2 border-b-2 border-[#d6bfa9]"
+        placeholder="Digite seu nome"
+      />
+    </InputForm>
+
+    <InputForm label="CPF:" name="cpf" error={errors.cpf?.message}>
+      <input
+        type="text"
+        {...register("cpf", {
+          required: "CPF é obrigatório",
+          validate: (v) => isValidCPF(v) || "CPF inválido",
+        })}
+        className="bg-[#f1ebe5] rounded-sm flex-1 p-2 border-b-2 border-[#d6bfa9]"
+        placeholder="Digite seu CPF"
+      />
+    </InputForm>
+
+    <InputForm label="Email: " error={errors.email?.message}>
+      <input
+        type="text"
+        className="bg-[#f1ebe5] rounded-sm flex-1 p-2 border-b-2 border-[#d6bfa9]"
+        {...register("email", {
+          required: "Email é obrigatorio",
+          validate: (v) => isEmail(v) || "Email é inválido",
+        })}
+        placeholder="Digite seu email"
+      />
+    </InputForm>
+
+    <InputForm
+      label="Senha: "
+      name="password"
+      error={errors.password?.message}
+      info={
+        <p className="text-[13px] mt-1 text-[#6b6b6b]">
+          Senha deve conter 8+ caracteres, maiúscula, minúscula, número e especial.
+        </p>
+      }
+    >
+      <input
+        type="text"
+        className="bg-[#f1ebe5] rounded-sm flex-1 p-2 border-b-2 border-[#d6bfa9]"
+        {...register("password", {
+          required: "Senha é obrigatoria",
+          pattern: {
+            value:
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
+            message: "Senha fraca",
+          },
+        })}
+        placeholder="Digite sua senha"
+      />
+    </InputForm>
+
+    <button
+      type="submit"
+      className="w-fit px-4 py-2 rounded-md border border-[#d6bfa9] bg-[#d6bfa9] text-white hover:bg-[#c9ad94] transition-all duration-300 hover:scale-105"
+    >
+      Criar conta
+    </button>
+
+    <div className="flex flex-col justify-center items-center text-[#3e3e3e]">
+      <p>Já tem uma conta?</p>
+      <button
+        type="button"
+        className="border-b border-[#c9ad94] hover:cursor-pointer"
+        onClick={() => navigate("/login")}
       >
-        <InputForm label="Nome:" error={errors.name?.message} name="name">
-          <input
-            type="text"
-            {...register("name", {
-              required: "Nome é obrigatório",
-            })}
-            className="bg-blue-300 rounded-sm flex-1 p-1 border-b-3 border-b-blue-900"
-            placeholder="Digite seu nome"
-          ></input>
-        </InputForm>
-
-        <InputForm label="CPF:" name="cpf" error={errors.cpf?.message}>
-          <input
-            type="text"
-            {...register("cpf", {
-              required: "CPF é obrigatório",
-              validate: (v) => isValidCPF(v) || "CPF inválido",
-            })}
-            className="bg-blue-300 rounded-sm flex-1 p-1 border-b-3 border-b-blue-900"
-            placeholder="Digite seu CPF"
-          ></input>
-        </InputForm>
-
-        <InputForm label="Email: " error={errors.email?.message}>
-          <input
-            type="text"
-            className="bg-blue-300 rounded-sm flex-1 p-1 border-b-3 border-b-blue-900"
-            {...register("email", {
-              required: "Email é obrigatorio",
-              validate: (v) => isEmail(v) || "Email é inválido",
-            })}
-            placeholder="Digite seu email"
-          ></input>
-        </InputForm>
-
-        <InputForm label="Senha: " name="password" error={errors.password?.message} info={            <p className="text-[13px] mt-1">
-              {" "}
-              Senha deve contar 8+ caracteres, maiúscula, minúscula, número e
-              especial(#@*&...).
-            </p>}>
-          <input
-            type="text"
-            className="bg-blue-300 rounded-sm flex-1 p-1 border-b-3 border-b-blue-900"
-            {...register("password", {
-              required: "Senha é obrigatoria",
-              pattern: {
-                value:
-                  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
-                message: "Senha fraca",
-              },
-            })}
-            placeholder="Digite sua senha"
-          ></input>
-        </InputForm>
-
-        <button
-          type="submit"
-          className="w-fit p-2 rounded-md border-blue-400 border-2 bg-blue-600 hover:shadow-xl transition-all duration-300 ease-in-out hover:scale-110 hover:cursor-pointer"
-        >
-          Criar conta
-        </button>
-        <div className="flex flex-col justify-center items-center">
-          <p>Já tem uma conta?</p>
-          <button type="button" className="border-b-blue-950 border-b-2 hover:cursor-pointer flex-1" onClick={() => navigate("/login")}>
-            Realizar login
-          </button>
-        </div>
-      </form>
+        Realizar login
+      </button>
     </div>
+  </form>
+</div>
   );
 }
 
