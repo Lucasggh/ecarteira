@@ -18,7 +18,7 @@ export async function depositModel({receiver_id,amount,type}) {
     return res.rows[0]
 }
 export async function balanceModel(id) {
-    const res = await pool.query("SELECT COALESCE(SUM(CASE WHEN receiver_id = $1 THEN amount WHEN sender_id = $1 THEN -amount ELSE 0 END),0)AS balance FROM transactions",[id]
+    const res = await pool.query("SELECT COALESCE(SUM(CASE WHEN receiver_id = $1 THEN amount::NUMERIC WHEN sender_id = $1 THEN -amount::NUMERIC ELSE 0 END),0)AS balance FROM transactions",[id]
     )
     console.log(`model: ${res.rows[0].balance}`)
     return res.rows[0].balance

@@ -8,6 +8,7 @@ import {
 import bcrypt from "bcrypt";
 import { verifyLogin, verifyRegister } from "./verifyScript.js";
 import jwt from "jsonwebtoken";
+import { stringify } from "qs";
 export async function createUserService(dataBody) {
   try {
     const { name, email, cpf, password, role } = dataBody;
@@ -69,7 +70,7 @@ export async function depositService(payload) {
     }
     const deposit = await depositModel({
       ...payload,
-      amount: Math.round(payload.amount * 100),
+      amount: String(payload.amount * 100),
     });
     return deposit;
   } catch (err) {
@@ -96,7 +97,7 @@ export async function withdrawnService(payload) {
     }
     const withdrawn = await withdrawModel({
       ...payload,
-      amount: Math.round(payload.amount * 100),
+      amount: String(payload.amount * 100),
     });
     return withdrawn.amount;
   } catch (err) {
