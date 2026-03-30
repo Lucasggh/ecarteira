@@ -12,7 +12,7 @@ CREATE DATABASE ecarteira;
 
     CREATE TABLE transactions(
         id SERIAL PRIMARY KEY,
-        amount BIGINT NOT NULL,
+        amount TEXT NOT NULL,
         type VARCHAR(20) NOT NULL,
         sender_id INT,
         receiver_id INT,
