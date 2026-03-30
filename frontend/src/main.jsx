@@ -5,7 +5,9 @@ import Login from './pages/Login.jsx'
 import './index.css'
 import Registrar from './pages/Registrar.jsx'
 import ProtectedRoute from './Components/ProtectedRoute.jsx'
-import Home from "./pages/Home.jsx" 
+import Layout from "./pages/Layout.jsx" 
+import Home from './pages/Home.jsx'
+import Transactions from './pages/Transactions.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <div className='min-h-screen'>
@@ -13,9 +15,16 @@ createRoot(document.getElementById('root')).render(
       <Routes>
         <Route path="/" element={<Registrar />} />
         <Route path="/login" element={<Login />} />
+
         <Route element={<ProtectedRoute/>}>
-          <Route path="/home" element={<Home />} />
+          <Route path="/app" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="home" element={<Home />} />
+            <Route path="transactions" element={<Transactions/>}/>
+          </Route>
         </Route>
+
+
       </Routes>
     </HashRouter>
     </div>

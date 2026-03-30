@@ -11,3 +11,22 @@ export async function loginModel(email){
     }
     return res.rows[0]
 }
+
+export async function depositModel({receiver_id,amount,type}) {
+    const res = await pool.query("INSERT INTO transactions (receiver_id,amount,type) VALUES($1,$2,$3) RETURNING *",
+    [receiver_id,amount,type])
+    return res.rows[0]
+}
+export async function balanceModel(id) {
+    const res = await pool.query("SELECT COALESCE(SUM(CASE WHEN receiver_id = $1 THEN amount WHEN sender_id = $1 THEN -amount ELSE 0 END),0)AS balance FROM transactions",[id]
+    )
+    console.log(`model: ${res.rows[0].balance}`)
+    return res.rows[0].balance
+}
+
+export async function withdrawModel({sender_id,amount,type}) {
+    const res = await pool.query("INSERT INTO transactions (sender_id,amount,type) VALUES($1,$2,$3) RETURNING *",
+        [sender_id,amount,type]
+    )
+    return res.rows[0]
+}

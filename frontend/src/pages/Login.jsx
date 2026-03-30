@@ -24,10 +24,11 @@ async function onsubmit(data) {
       password: data.password
     }
   );
-    localStorage.setItem("token",response.token)
+    const token = response.data.data.token;
+    localStorage.setItem("token",token)
     setError(false)
     console.log(response.data);
-    navigate("/home")
+    navigate("/app/home")
   } catch (err) {
     console.error(err);
     setError(true)
