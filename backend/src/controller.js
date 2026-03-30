@@ -4,6 +4,7 @@ import {
   createUserService,
   depositService,
   loginService,
+  transferService,
   withdrawnService,
 } from "./services.js";
 
@@ -42,7 +43,7 @@ export async function depositControler(req, res) {
     const payload = {
       receiver_id: req.userId,
       amount: req.body.amount,
-      type:"deposit"
+      type: "deposit",
     };
     const depositRes = await depositService(payload);
     res.status(200).json({
@@ -61,13 +62,12 @@ export async function depositControler(req, res) {
 export async function balanceController(req, res) {
   try {
     const balance = await balanceService(req.userId);
-    console.log(`controller: ${balance}`)
+    console.log(`controller: ${balance}`);
     res.status(200).json({
-      message: "Succes deposit",
+      message: "Succes balance",
       status: "sucess",
       balance: balance,
     });
-
   } catch (err) {
     res.status(500).json({
       message: "Server error",
@@ -76,21 +76,43 @@ export async function balanceController(req, res) {
   }
 }
 
-export async function withdrawController(req,res) {
-  try{
+export async function withdrawController(req, res) {
+  try {
     const payload = {
-      sender_id:req.userId,
-      amount:req.body.amount,
-      type:"withdrawn"
-    }
-    const withdrawn = await withdrawnService(payload)
-      res.status(200).json({
+      sender_id: req.userId,
+      amount: req.body.amount,
+      type: "withdrawn",
+    };
+    const withdrawn = await withdrawnService(payload);
+    res.status(200).json({
       message: "Succes withdrawn",
       status: "sucess",
       withdrawn: withdrawn,
     });
-  }catch(err){
-      res.status(500).json({
+  } catch (err) {
+    res.status(500).json({
+      message: "Server error",
+      err: err.message,
+    });
+  }
+}
+
+export async function transferController(req, res) {
+  try {
+    const payload = {
+      sender_id: req.userId,
+      receiver_id: req.body.receiver_id,
+      amount: req.body.amount,
+      type: "transfer",
+    };
+    const transfer = await transferService(payload);
+    res.status(200).json({
+      message: "Succes withdrawn",
+      status: "sucess",
+      withdrawn: transfer,
+    });
+  } catch (err) {
+    res.status(500).json({
       message: "Server error",
       err: err.message,
     });
