@@ -32,6 +32,7 @@ export async function withdrawModel({sender_id,amount,type}) {
 }
 
 export async function TransferModel({sender_id,receiver_id,amount,type}) {
+    
     const res = await pool.query("INSERT INTO transactions (sender_id,receiver_id,amount,type) VALUES($1,$2,$3,$4) RETURNING *",[sender_id,receiver_id,amount,type])
     return res.rows[0]
 

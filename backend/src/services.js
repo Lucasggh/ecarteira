@@ -9,7 +9,6 @@ import {
 import bcrypt from "bcrypt";
 import { verifyLogin, verifyRegister } from "./verifyScript.js";
 import jwt from "jsonwebtoken";
-import { stringify } from "qs";
 export async function createUserService(dataBody) {
   try {
     const { name, email, cpf, password, role } = dataBody;
@@ -45,7 +44,7 @@ export async function loginService(dataBody) {
     const token = jwt.sign(
       { sub: userSafe.id, role: userSafe.role, email: userSafe.email },
       process.env.JWT_SECRET,
-      { expiresIn: "10Mins" },
+      { expiresIn: "1Hr" },
     );
     const payload = {
       user: {
@@ -115,6 +114,10 @@ export async function transferService(payload) {
       throw new Error("invalid credentials");
     }
 
+    const balanceCents = await balanceModel(payload.sender_id)
+    if(!balanceCents || balanceCents <= 0 || Number(payload.amount)*100 > Number(balanceCents)) {
+      throw new Error ("invalid amount");
+    }
     const transfer = await TransferModel({
       ...payload,
       amount: String(payload.amount * 100)})
