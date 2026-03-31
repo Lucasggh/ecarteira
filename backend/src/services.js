@@ -70,7 +70,7 @@ export async function depositService(payload) {
     }
     const deposit = await depositModel({
       ...payload,
-      amount: String(payload.amount * 100),
+      amount: String(Math.round(payload.amount * 100)),
     });
     return deposit;
   } catch (err) {
@@ -97,7 +97,7 @@ export async function withdrawnService(payload) {
     }
     const withdrawn = await withdrawModel({
       ...payload,
-      amount: String(payload.amount * 100),
+      amount: String(Math.round(payload.amount * 100)),
     });
     return withdrawn.amount;
   } catch (err) {
@@ -115,12 +115,12 @@ export async function transferService(payload) {
     }
 
     const balanceCents = await balanceModel(payload.sender_id)
-    if(!balanceCents || balanceCents <= 0 || Number(payload.amount)*100 > Number(balanceCents)) {
+    if(!balanceCents || balanceCents <= 0 || Math.round(Number(payload.amount)*100) > Number(balanceCents)) {
       throw new Error ("invalid amount");
     }
     const transfer = await TransferModel({
       ...payload,
-      amount: String(payload.amount * 100)})
+      amount: String(Math.round(payload.amount * 100))})
       return transfer
   }catch(err){
     throw err;
