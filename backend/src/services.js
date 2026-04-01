@@ -5,6 +5,7 @@ import {
   balanceModel,
   withdrawModel,
   TransferModel,
+  transactionsModel,
 } from "./model.js";
 import bcrypt from "bcrypt";
 import { verifyLogin, verifyRegister } from "./verifyScript.js";
@@ -106,23 +107,42 @@ export async function withdrawnService(payload) {
 }
 
 export async function transferService(payload) {
-  try{
+  try {
     if (!/^\d+(\.\d{1,2})?$/.test(payload.amount)) {
       throw new Error("invalid amount format");
     }
-    if (!payload.sender_id || !payload.receiver_id || !payload.amount || !payload.type) {
+    if (
+      !payload.sender_id ||
+      !payload.receiver_id ||
+      !payload.amount ||
+      !payload.type
+    ) {
       throw new Error("invalid credentials");
     }
 
-    const balanceCents = await balanceModel(payload.sender_id)
-    if(!balanceCents || balanceCents <= 0 || Math.round(Number(payload.amount)*100) > Number(balanceCents)) {
-      throw new Error ("invalid amount");
+    const balanceCents = await balanceModel(payload.sender_id);
+    if (
+      !balanceCents ||
+      balanceCents <= 0 ||
+      Math.round(Number(payload.amount) * 100) > Number(balanceCents)
+    ) {
+      throw new Error("invalid amount");
     }
     const transfer = await TransferModel({
       ...payload,
-      amount: String(Math.round(payload.amount * 100))})
-      return transfer
-  }catch(err){
+      amount: String(Math.round(payload.amount * 100)),
+    });
+    return transfer;
+  } catch (err) {
     throw err;
+  }
+}
+
+export async function transactionsService(id) {
+  try {
+    const transactions = await transactionsModel(id);
+    return transactions
+  } catch (err) {
+    throw err
   }
 }

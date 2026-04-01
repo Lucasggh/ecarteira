@@ -1,9 +1,10 @@
-import e from "express";
+
 import {
   balanceService,
   createUserService,
   depositService,
   loginService,
+  transactionsService,
   transferService,
   withdrawnService,
 } from "./services.js";
@@ -38,7 +39,7 @@ export async function loginController(req, res) {
   }
 }
 
-export async function depositControler(req, res) {
+export async function depositController(req, res) {
   try {
     const payload = {
       receiver_id: req.userId,
@@ -64,7 +65,7 @@ export async function balanceController(req, res) {
     const balance = await balanceService(req.userId);
     console.log(`controller: ${balance}`);
     res.status(200).json({
-      message: "Succes balance",
+      message: "Succes get balance",
       status: "sucess",
       balance: balance,
     });
@@ -109,7 +110,7 @@ export async function transferController(req, res) {
     res.status(200).json({
       message: "Succes withdrawn",
       status: "sucess",
-      withdrawn: transfer,
+      transfer: transfer,
     });
   } catch (err) {
     res.status(500).json({
@@ -118,3 +119,19 @@ export async function transferController(req, res) {
     });
   }
 }
+
+export async function transactionsController(req,res) {
+  try{
+  const transactions = await transactionsService(req.userId)
+      res.status(200).json({
+      message: "Succes get transactions",
+      status: "sucess",
+      transactions: transactions,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: "Server error",
+      err: err.message,
+    });
+  
+}}

@@ -38,3 +38,7 @@ export async function TransferModel({sender_id,receiver_id,amount,type}) {
 
     
 }
+export async function transactionsModel(id) {
+    const res = await pool.query("SELECT * FROM transactions WHERE receiver_id = $1 OR sender_id = $1 ",[id])
+    return res.rows
+}

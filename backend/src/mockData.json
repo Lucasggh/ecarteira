@@ -1,0 +1,56 @@
+{
+  "users": [
+    {
+      "name": "Lucas Silva",
+      "email": "lucas.silva@example.com",
+      "cpf": "12345678909",
+      "password": "Senha@123",
+      "role": "user"
+    },
+    {
+      "name": "Ana Pereira",
+      "email": "ana.pereira@example.com",
+      "cpf": "98765432100",
+      "password": "Ana@1234",
+      "role": "user"
+    }
+  ],
+  "deposits": [
+    { "receiver_id": 1, "amount": 150.50, "type": "deposit" },
+    { "receiver_id": 1, "amount": 200.00, "type": "deposit" },
+    { "receiver_id": 1, "amount": 75.25, "type": "deposit" },
+    { "receiver_id": 1, "amount": 50.00, "type": "deposit" },
+    { "receiver_id": 1, "amount": 120.00, "type": "deposit" },
+    
+    { "receiver_id": 2, "amount": 300.00, "type": "deposit" },
+    { "receiver_id": 2, "amount": 180.75, "type": "deposit" },
+    { "receiver_id": 2, "amount": 60.00, "type": "deposit" },
+    { "receiver_id": 2, "amount": 90.50, "type": "deposit" },
+    { "receiver_id": 2, "amount": 110.25, "type": "deposit" }
+  ],
+  "withdraws": [
+    { "sender_id": 1, "amount": 50.00, "type": "withdrawn" },
+    { "sender_id": 1, "amount": 40.25, "type": "withdrawn" },
+    { "sender_id": 1, "amount": 30.00, "type": "withdrawn" },
+    { "sender_id": 1, "amount": 25.50, "type": "withdrawn" },
+    { "sender_id": 1, "amount": 60.00, "type": "withdrawn" },
+    
+    { "sender_id": 2, "amount": 100.00, "type": "withdrawn" },
+    { "sender_id": 2, "amount": 50.25, "type": "withdrawn" },
+    { "sender_id": 2, "amount": 70.00, "type": "withdrawn" },
+    { "sender_id": 2, "amount": 30.50, "type": "withdrawn" },
+    { "sender_id": 2, "amount": 60.00, "type": "withdrawn" }
+  ],
+  "transfers": [
+    { "sender_id": 1, "receiver_id": 2, "amount": 20.00, "type": "transfer" },
+    { "sender_id": 1, "receiver_id": 2, "amount": 15.50, "type": "transfer" },
+    { "sender_id": 1, "receiver_id": 2, "amount": 10.00, "type": "transfer" },
+    { "sender_id": 2, "receiver_id": 1, "amount": 50.00, "type": "transfer" },
+    { "sender_id": 2, "receiver_id": 1, "amount": 25.25, "type": "transfer" },
+    { "sender_id": 2, "receiver_id": 1, "amount": 40.00, "type": "transfer" },
+    { "sender_id": 1, "receiver_id": 2, "amount": 35.00, "type": "transfer" },
+    { "sender_id": 1, "receiver_id": 2, "amount": 45.75, "type": "transfer" },
+    { "sender_id": 2, "receiver_id": 1, "amount": 30.00, "type": "transfer" },
+    { "sender_id": 1, "receiver_id": 2, "amount": 10.50, "type": "transfer" }
+  ]
+}
