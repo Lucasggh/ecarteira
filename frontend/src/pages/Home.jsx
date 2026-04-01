@@ -12,7 +12,7 @@ function Home() {
 
   useEffect(() => {
     const fetchBalance = async () => {
-      if (location.pathname === "/api/home") { // ajuste para sua rota real
+      if (location.pathname === "/app/home") { // ajuste para sua rota real
         try {
           const response = await api.get("/balance", {
             headers: {

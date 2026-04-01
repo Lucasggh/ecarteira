@@ -22,7 +22,8 @@ function Registrar() {
         name:data.name,
         email:data.email,
         cpf:data.cpf,
-        password:data.password
+        password:data.password,
+        role:"user"
     })
     console.log(response.data)
     console.log(response.status)
