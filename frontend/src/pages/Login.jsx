@@ -28,7 +28,7 @@ async function onsubmit(data) {
     localStorage.setItem("token",token)
     setError(false)
     console.log(response.data);
-    navigate("/app/home")
+    navigate("/home")
   } catch (err) {
     console.error(err);
     setError(true)
