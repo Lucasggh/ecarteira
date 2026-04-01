@@ -97,3 +97,5 @@ cd ecarteira
 - PostgreSQL (via `pg-pool`)
 - Bcrypt (Criptografia de senhas)
 - Dotenv (Gerenciamento de variáveis sensíveis)
+
+<a href="/free-video/blue-purple-pink-gradient-background-motion-1_171556#fromView=search&page=1&position=25&uuid=e6cf3ef2-2183-4741-b3cb-c0b61b7978e8">Image by freepik</a>
