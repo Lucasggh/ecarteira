@@ -49,6 +49,7 @@ export async function loginService(dataBody) {
     );
     const payload = {
       user: {
+        name:userSafe.name,
         id: userSafe.id,
         email: userSafe.email,
         role: userSafe.role,

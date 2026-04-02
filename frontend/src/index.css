@@ -4,3 +4,6 @@ html,body,#root{
   padding: 0;
   height: 100%;
 }
+*{
+  font-family: 'Times New Roman', Times, serif;
+}

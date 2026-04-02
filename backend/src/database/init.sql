@@ -26,4 +26,4 @@ CREATE DATABASE ecarteira;
         FOREIGN KEY (receiver_id)
         REFERENCES users(id)
 
-    )
+    );

@@ -26,6 +26,9 @@ async function onsubmit(data) {
   );
     const token = response.data.data.token;
     localStorage.setItem("token",token)
+    console.log("SALVANDO:", response.data.data.user.name)
+    localStorage.setItem("userName",response.data.data.user.name)
+    console.log("PEGANDO:", localStorage.getItem("userName"))
     setError(false)
     console.log(response.data);
     navigate("/home")
