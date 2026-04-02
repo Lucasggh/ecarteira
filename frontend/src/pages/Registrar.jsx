@@ -34,7 +34,7 @@ function Registrar() {
 <div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f5f2]">
   <form
     onSubmit={handleSubmit(onsubmit)}
-    className="flex flex-col bg-[#ffffff] p-4 rounded-xl border border-[#e5ded8] gap-4 items-center w-[400px] shadow-md"
+    className="flex flex-col bg-[#ffffff] p-4 rounded-xl border border-[#e5ded8] gap-4 items-center w-100 shadow-md"
   >
     <InputForm label="Nome:" error={errors.name?.message} name="name">
       <input

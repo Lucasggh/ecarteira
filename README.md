@@ -1,6 +1,8 @@
 # eCarteira (Digital Wallet)
 
-Este é o repositório do projeto **eCarteira**, uma aplicação de carteira digital full-stack. O projeto é dividido em duas partes principais:
+Este é o repositório do projeto **eCarteira**, uma aplicação de carteira digital full-stack. O projeto permite aos usuários gerenciar suas finanças através de um dashboard intuitivo, visualizando saldo total, múltiplas contas de usuário e possuindo um histórico de transações com uma tabela ordenável.
+
+O projeto é dividido em duas partes principais:
 - **Frontend**: Desenvolvido em React com Vite e estilizado com Tailwind CSS.
 - **Backend**: Uma API RESTful desenvolvida em Node.js com Express e banco de dados PostgreSQL.
 
@@ -10,7 +12,7 @@ Este é o repositório do projeto **eCarteira**, uma aplicação de carteira dig
 
 Para rodar este projeto na sua máquina, você vai precisar ter instalado:
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/en/) (Versão 20 ou superior recomendada)
+- [Node.js](https://nodejs.org/en/) (Versão 18 ou superior recomendada)
 - [PostgreSQL](https://www.postgresql.org/)
 
 ---
@@ -28,6 +30,8 @@ cd ecarteira
 ---
 
 ### 2. Configurando o Banco de Dados (PostgreSQL)
+
+> **Aviso Importante:** O projeto original utilizava um banco de dados fechado hospedado no **Supabase**. Para rodar localmente, você deverá criar o seu próprio banco de dados em **PostgreSQL** e certificar-se de configurar a conexão no arquivo `src/database/db.js` no backend (ou utilizar as variáveis de ambiente corretas).
 
 1. Abra o console do seu PostgreSQL (`psql`) ou alguma interface gráfica como o pgAdmin.
 2. Crie um banco de dados vazio chamado `ecarteira` executando o seguinte comando SQL:
