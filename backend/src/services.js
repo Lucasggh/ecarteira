@@ -48,13 +48,13 @@ export async function loginService(dataBody) {
       { expiresIn: "1Hr" },
     );
     const payload = {
-      user: {
-        name:userSafe.name,
-        id: userSafe.id,
-        email: userSafe.email,
-        role: userSafe.role,
-      },
-      token: token,
+    user: {
+      id: userSafe.id,
+      name: userSafe.name,
+      role: userSafe.role,
+      email: userSafe.email
+    },
+      token: token
     };
     return payload;
   } catch (err) {
@@ -67,7 +67,7 @@ export async function depositService(payload) {
     if (!/^\d+(\.\d{1,2})?$/.test(payload.amount)) {
       throw new Error("invalid amount format");
     }
-    if (!payload.receiver_id || !payload.amount || !payload.type) {
+    if (!payload.receiver_id || !payload.amount || !payload.type || Number(payload.amount) < 0) {
       throw new Error("invalid credentials");
     }
     const deposit = await depositModel({

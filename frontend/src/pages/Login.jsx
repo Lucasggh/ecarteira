@@ -24,10 +24,10 @@ async function onsubmit(data) {
       password: data.password
     }
   );
-    const token = response.data.data.token;
+    const token = response.data.token;
     localStorage.setItem("token",token)
-    console.log("SALVANDO:", response.data.data.user.name)
-    localStorage.setItem("userName",response.data.data.user.name)
+    console.log("SALVANDO:", response.data.user.name)
+    localStorage.setItem("userName",response.data.user.name)
     console.log("PEGANDO:", localStorage.getItem("userName"))
     setError(false)
     console.log(response.data);
