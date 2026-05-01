@@ -1,6 +1,6 @@
-import "dotenv/config";
+
 import express from "express";
-import routes from "./src/routes.js";
+import routes from "./src/routes/index.js";
 import cors from "cors"
 const app = express()
 app.use(cors({
