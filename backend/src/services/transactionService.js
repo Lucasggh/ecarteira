@@ -41,6 +41,16 @@ export async function withdrawnService(payload) {
     if (!payload.sender_id || !payload.amount || !payload.type) {
       throw new Error("invalid credentials");
     }
+
+    const balanceCents = await balanceModel(payload.sender_id);
+    if (
+      !balanceCents ||
+      balanceCents <= 0 ||
+      Math.round(Number(payload.amount) * 100) > Number(balanceCents)
+    ) {
+      throw new Error("invalid amount");
+    }
+
     const withdrawn = await withdrawModel({
       ...payload,
       amount: String(Math.round(payload.amount * 100)),
@@ -86,7 +96,10 @@ export async function transferService(payload) {
 export async function transactionsService(id) {
   try {
     const transactions = await transactionsModel(id);
-    return transactions
+    return transactions.map(t => ({
+      ...t,
+      amount: String(Number(t.amount) / 100)
+    }));
   } catch (err) {
     throw err
   }

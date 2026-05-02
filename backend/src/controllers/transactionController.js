@@ -15,8 +15,8 @@ export async function depositController(req, res) {
     };
     const depositRes = await depositService(payload);
     res.status(200).json({
-      message: "Succes deposit",
-      status: "sucess",
+      message: "Success deposit",
+      status: "success",
       deposit: depositRes,
     });
   } catch (err) {
@@ -32,8 +32,8 @@ export async function balanceController(req, res) {
     const balance = await balanceService(req.userId);
     console.log(`controller: ${balance}`);
     res.status(200).json({
-      message: "Succes get balance",
-      status: "sucess",
+      message: "Success get balance",
+      status: "success",
       balance: balance,
     });
   } catch (err) {
@@ -53,8 +53,8 @@ export async function withdrawController(req, res) {
     };
     const withdrawn = await withdrawnService(payload);
     res.status(200).json({
-      message: "Succes withdrawn",
-      status: "sucess",
+      message: "Success withdrawn",
+      status: "success",
       withdrawn: withdrawn,
     });
   } catch (err) {
@@ -75,8 +75,8 @@ export async function transferController(req, res) {
     };
     const transfer = await transferService(payload);
     res.status(200).json({
-      message: "Succes withdrawn",
-      status: "sucess",
+      message: "Success transfer",
+      status: "success",
       transfer: transfer,
     });
   } catch (err) {
@@ -91,8 +91,8 @@ export async function transactionsController(req,res) {
   try{
   const transactions = await transactionsService(req.userId)
       res.status(200).json({
-      message: "Succes get transactions",
-      status: "sucess",
+      message: "Success get transactions",
+      status: "success",
       transactions: transactions,
     });
   } catch (err) {

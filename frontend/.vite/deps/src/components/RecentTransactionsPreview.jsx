@@ -1,0 +1,115 @@
+import React from 'react';
+import { 
+    Box, Typography, List, ListItem, ListItemText, ListItemAvatar, Avatar, Divider, Button 
+} from '@mui/material';
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import FastfoodIcon from '@mui/icons-material/Fastfood';
+import HomeIcon from '@mui/icons-material/Home';
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+import WorkIcon from '@mui/icons-material/Work';
+import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import { useNavigate } from 'react-router-dom';
+
+// Helper to pick an icon based on category
+const getCategoryIcon = (category) => {
+    switch(category) {
+        case 'Food': return <FastfoodIcon />;
+        case 'Housing': return <HomeIcon />;
+        case 'Transport': return <DirectionsCarIcon />;
+        case 'Health': return <FitnessCenterIcon />;
+        case 'Salary':
+        case 'Side Hustle': return <WorkIcon />;
+        default: return <ShoppingCartIcon />;
+    }
+};
+
+const getCategoryColor = (category, type) => {
+    if (type === 'income') return '#e8f5e9'; // light green
+    switch(category) {
+        case 'Food': return '#ffebee'; // light red
+        case 'Housing': return '#e3f2fd'; // light blue
+        case 'Transport': return '#e0f7fa'; // cyan
+        case 'Health': return '#fff8e1'; // amber
+        default: return '#f5f5f5'; // grey
+    }
+};
+
+const getCategoryIconColor = (category, type) => {
+    if (type === 'income') return '#4caf50';
+    switch(category) {
+        case 'Food': return '#f44336';
+        case 'Housing': return '#2196f3';
+        case 'Transport': return '#00bcd4';
+        case 'Health': return '#ffc107';
+        default: return '#9e9e9e';
+    }
+};
+
+const RecentTransactionsPreview = ({ transactions }) => {
+    const navigate = useNavigate();
+    // Only show top 5
+    const recentTx = transactions.slice(0, 5);
+
+    return (
+        <Box sx={{ 
+            width: '100%', 
+            p: 3, 
+            bgcolor: 'background.paper', 
+            borderRadius: 3, 
+            boxShadow: '0 4px 20px 0 rgba(0,0,0,0.05)',
+            display: 'flex',
+            flexDirection: 'column',
+            height: '100%'
+        }}>
+            <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
+                <Typography variant="h6" fontWeight="bold">
+                    Recent Transactions
+                </Typography>
+                <Button 
+                    size="small" 
+                    color="primary" 
+                    onClick={() => navigate('/transactions')}
+                    sx={{ textTransform: 'none', fontWeight: 'bold' }}
+                >
+                    View All
+                </Button>
+            </Box>
+            
+            <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0, flexGrow: 1 }}>
+                {recentTx.map((tx, index) => {
+                    const isIncome = tx.type === 'income';
+                    return (
+                        <React.Fragment key={tx.id}>
+                            <ListItem sx={{ px: 0, py: 1.5 }}>
+                                <ListItemAvatar>
+                                    <Avatar sx={{ 
+                                        bgcolor: getCategoryColor(tx.category, tx.type), 
+                                        color: getCategoryIconColor(tx.category, tx.type),
+                                        borderRadius: '12px'
+                                    }}>
+                                        {getCategoryIcon(tx.category)}
+                                    </Avatar>
+                                </ListItemAvatar>
+                                <ListItemText 
+                                    primary={<Typography variant="subtitle2" fontWeight="bold">{tx.description}</Typography>} 
+                                    secondary={<Typography variant="caption" color="text.secondary">{new Date(tx.date).toLocaleDateString()} • {tx.category}</Typography>} 
+                                />
+                                <Typography 
+                                    variant="subtitle2" 
+                                    fontWeight="bold"
+                                    color={isIncome ? 'success.main' : 'text.primary'}
+                                >
+                                    {isIncome ? '+' : ''}{tx.amount.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}
+                                </Typography>
+                            </ListItem>
+                            {index < recentTx.length - 1 && <Divider component="li" />}
+                        </React.Fragment>
+                    );
+                })}
+            </List>
+        </Box>
+    );
+};
+
+export default RecentTransactionsPreview;

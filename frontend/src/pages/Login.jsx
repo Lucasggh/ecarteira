@@ -1,100 +1,66 @@
-import { useForm } from "react-hook-form";
-import axios from "axios"
-import isEmail from "validator/lib/isEmail";
-import InputForm from "../Components/Input";
-import { useNavigate } from "react-router";
-import { useState } from "react";
-const api = axios.create({
-  baseURL:"http://localhost:3067/api"
-})
-function Login() {
-  const navigate = useNavigate()
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
+import { useState } from 'react';
+import { Box, Button, TextField, Typography, Paper } from '@mui/material';
+import { useAuth } from '../context/AuthContext';
 
-  const [error,setError] = useState(false)
+const Login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const { login } = useAuth();
 
-async function onsubmit(data) {
-  try {
-    const response = await api.post("/login", 
-    { email: data.email,
-      password: data.password
-    }
-  );
-    const token = response.data.token;
-    localStorage.setItem("token",token)
-    console.log("SALVANDO:", response.data.user.name)
-    localStorage.setItem("userName",response.data.user.name)
-    console.log("PEGANDO:", localStorage.getItem("userName"))
-    setError(false)
-    console.log(response.data);
-    navigate("/home")
-  } catch (err) {
-    console.error(err);
-    setError(true)
-  }
-}
-    return ( 
-<div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f5f2]">
-  <form
-    onSubmit={handleSubmit(onsubmit)}
-    className="flex flex-col bg-[#ffffff] p-4 rounded-xl border border-[#e5ded8] gap-4 items-center w-[400px] relative shadow-md"
-  >
-    <InputForm label="Email: " name="cpf" error={errors.email?.message}>
-      <input
-        type="text"
-        className="bg-[#f1ebe5] rounded-sm flex-1 p-2 border-b-2 border-[#d6bfa9] text-[#3e3e3e]"
-        {...register("email", {
-          required: "Email é obrigatorio",
-          validate: (v) => isEmail(v) || "Email é inválido",
-        })}
-        placeholder="Digite seu email"
-      />
-    </InputForm>
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        setError('');
+        try {
+            const response = await fetch('http://localhost:3067/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                login(data.user, data.token);
+            } else {
+                setError(data.message || data.error || 'Login failed');
+            }
+        } catch (err) {
+            setError('Error connecting to server');
+        }
+    };
 
-    <InputForm label="Senha: " error={errors.password?.message}>
-      <input
-        type="text"
-        className="bg-[#f1ebe5] rounded-sm flex-1 p-2 border-b-2 border-[#d6bfa9] text-[#3e3e3e]"
-        {...register("password", {
-          required: "Senha é obrigatoria",
-          pattern: {
-            value:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
-            message: "Senha fraca",
-          },
-        })}
-        placeholder="Digite sua senha"
-      />
-    </InputForm>
-
-    {error ? <p className="absolute bottom-32 text-red-400 text-sm">
-      Credenciais inválidas, Email e Senha estão corretos?
-    </p> : <div className="absolute"></div>}
-
-    <button
-      type="submit"
-      className="w-fit px-4 py-2 rounded-md border border-[#d6bfa9] bg-[#d6bfa9] text-white hover:bg-[#c9ad94] transition-all duration-300 hover:scale-105"
-    >
-      Entrar
-    </button>
-
-    <div className="flex flex-col justify-center items-center text-[#3e3e3e]">
-      <p>Não possui uma conta?</p>
-      <button
-        type="button"
-        className="border-b border-[#c9ad94] hover:cursor-pointer"
-        onClick={() => navigate("/")}
-      >
-        Realizar cadastro
-      </button>
-    </div>
-  </form>
-</div>
-  );
-}
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', bgcolor: 'background.default' }}>
+            <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 400 }}>
+                <Typography variant="h5" fontWeight="bold" gutterBottom textAlign="center">
+                    Banquexx Login
+                </Typography>
+                {error && <Typography color="error" textAlign="center" mb={2}>{error}</Typography>}
+                <form onSubmit={handleLogin}>
+                    <TextField
+                        label="Email"
+                        type="email"
+                        fullWidth
+                        margin="normal"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <TextField
+                        label="Password"
+                        type="password"
+                        fullWidth
+                        margin="normal"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                    <Button type="submit" variant="contained" fullWidth sx={{ mt: 3, py: 1.5 }}>
+                        Login
+                    </Button>
+                </form>
+            </Paper>
+        </Box>
+    );
+};
 
 export default Login;

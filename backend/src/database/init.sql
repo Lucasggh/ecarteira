@@ -17,6 +17,8 @@ CREATE DATABASE ecarteira;
         type VARCHAR(20) NOT NULL,
         sender_id INT,
         receiver_id INT,
+        category TEXT DEFAULT 'Sem Categoria',
+        date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 
         CONSTRAINT fk_sender
         FOREIGN KEY (sender_id)
