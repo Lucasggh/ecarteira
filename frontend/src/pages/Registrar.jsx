@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { isValidCPF } from "cnpj-cpf-validator";
 import isEmail from "validator/lib/isEmail";
-import InputForm from "../Components/Input.jsx";
+import InputForm from "../components/Input.jsx";
 import { useNavigate } from "react-router";
 import axios from "axios"
 const api = axios.create({
