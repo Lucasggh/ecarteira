@@ -18,7 +18,16 @@ const ProtectedRoute = ({ children }) => {
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default', width: '100%' }}>
       <Sidebar />
-      <Box component="main" sx={{ flexGrow: 1, p: { xs: 2, md: 4, lg: 5 }, width: '100%' }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: { xs: 2, md: 4, lg: 5 },
+          pt: { xs: 10, md: 4, lg: 5 },
+          width: '100%',
+          minWidth: 0,
+        }}
+      >
         {children}
       </Box>
     </Box>
