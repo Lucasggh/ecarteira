@@ -12,4 +12,4 @@ export function auth(req,res,next){
     }catch(err){
         return res.status(401).json({err:"Invalid token"})
     }
-}
+}//
