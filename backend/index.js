@@ -4,7 +4,7 @@ import routes from "./src/routes/index.js";
 import cors from "cors"
 const app = express()
 app.use(cors({
-  origin: "https://ecarteira-taupe.vercel.app",
+  origin: ["https://ecarteira-taupe.vercel.app","http://localhost:5173"],
   credentials: true
 }));
 
