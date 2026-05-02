@@ -1,119 +1,114 @@
-import { useForm } from "react-hook-form";
+import { useState } from 'react';
+import { Box, Button, TextField, Typography, Paper } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { isValidCPF } from "cnpj-cpf-validator";
 import isEmail from "validator/lib/isEmail";
-import InputForm from "../components/Input.jsx";
-import { useNavigate } from "react-router";
-import axios from "axios"
-const api = axios.create({
-  baseURL: "https://ecarteira.onrender.com/api"
-})
-function Registrar() {
-  const navigate = useNavigate()
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
 
-  async function onsubmit (data) {
-    const response = await api.post("/auth/register",
-      {
-        name:data.name,
-        email:data.email,
-        cpf:data.cpf,
-        password:data.password,
-        role:"user"
-    })
-    console.log(response.data)
-    console.log(response.status)
-    console.log(response.headers)
+const Registrar = () => {
+    const [name, setName] = useState('');
+    const [cpf, setCpf] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-  };
-  return (
-<div className="min-h-screen flex flex-col items-center justify-center bg-[#f8f5f2]">
-  <form
-    onSubmit={handleSubmit(onsubmit)}
-    className="flex flex-col bg-[#ffffff] p-4 rounded-xl border border-[#e5ded8] gap-4 items-center w-100 shadow-md"
-  >
-    <InputForm label="Nome:" error={errors.name?.message} name="name">
-      <input
-        type="text"
-        {...register("name", { required: "Nome é obrigatório" })}
-        className="bg-[#f1ebe5] rounded-sm flex-1 p-2 border-b-2 border-[#d6bfa9]"
-        placeholder="Digite seu nome"
-      />
-    </InputForm>
+    const handleRegister = async (e) => {
+        e.preventDefault();
+        setError('');
 
-    <InputForm label="CPF:" name="cpf" error={errors.cpf?.message}>
-      <input
-        type="text"
-        {...register("cpf", {
-          required: "CPF é obrigatório",
-          validate: (v) => isValidCPF(v) || "CPF inválido",
-        })}
-        className="bg-[#f1ebe5] rounded-sm flex-1 p-2 border-b-2 border-[#d6bfa9]"
-        placeholder="Digite seu CPF"
-      />
-    </InputForm>
+        // Validações locais
+        if (!isValidCPF(cpf)) {
+            setError('CPF inválido');
+            return;
+        }
+        if (!isEmail(email)) {
+            setError('Email inválido');
+            return;
+        }
+        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(password)) {
+            setError('A senha deve conter 8+ caracteres, maiúscula, minúscula, número e especial.');
+            return;
+        }
 
-    <InputForm label="Email: " error={errors.email?.message}>
-      <input
-        type="text"
-        className="bg-[#f1ebe5] rounded-sm flex-1 p-2 border-b-2 border-[#d6bfa9]"
-        {...register("email", {
-          required: "Email é obrigatorio",
-          validate: (v) => isEmail(v) || "Email é inválido",
-        })}
-        placeholder="Digite seu email"
-      />
-    </InputForm>
+        try {
+            const response = await fetch('http://localhost:3067/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, cpf, password, role: "user" })
+            });
+            const data = await response.json();
+            
+            if (response.ok) {
+                // Redireciona para o login após criar a conta
+                navigate('/login');
+            } else {
+                setError(data.message || data.err || 'Erro ao criar conta');
+            }
+        } catch (err) {
+            setError('Erro ao conectar ao servidor');
+        }
+    };
 
-    <InputForm
-      label="Senha: "
-      name="password"
-      error={errors.password?.message}
-      info={
-        <p className="text-[13px] mt-1 text-[#6b6b6b]">
-          Senha deve conter 8+ caracteres, maiúscula, minúscula, número e especial.
-        </p>
-      }
-    >
-      <input
-        type="text"
-        className="bg-[#f1ebe5] rounded-sm flex-1 p-2 border-b-2 border-[#d6bfa9]"
-        {...register("password", {
-          required: "Senha é obrigatoria",
-          pattern: {
-            value:
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/,
-            message: "Senha fraca",
-          },
-        })}
-        placeholder="Digite sua senha"
-      />
-    </InputForm>
-
-    <button
-      type="submit"
-      className="w-fit px-4 py-2 rounded-md border border-[#d6bfa9] bg-[#d6bfa9] text-white hover:bg-[#c9ad94] transition-all duration-300 hover:scale-105"
-    >
-      Criar conta
-    </button>
-
-    <div className="flex flex-col justify-center items-center text-[#3e3e3e]">
-      <p>Já tem uma conta?</p>
-      <button
-        type="button"
-        className="border-b border-[#c9ad94] hover:cursor-pointer"
-        onClick={() => navigate("/login")}
-      >
-        Realizar login
-      </button>
-    </div>
-  </form>
-</div>
-  );
-}
+    return (
+        <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '100vh', bgcolor: 'background.default' }}>
+            <Paper elevation={3} sx={{ p: 4, width: '100%', maxWidth: 400 }}>
+                <Typography variant="h5" fontWeight="bold" gutterBottom textAlign="center">
+                    Criar Conta
+                </Typography>
+                {error && <Typography color="error" textAlign="center" mb={2}>{error}</Typography>}
+                <form onSubmit={handleRegister}>
+                    <TextField
+                        label="Nome"
+                        type="text"
+                        fullWidth
+                        margin="normal"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                    <TextField
+                        label="CPF"
+                        type="text"
+                        fullWidth
+                        margin="normal"
+                        value={cpf}
+                        onChange={(e) => setCpf(e.target.value)}
+                        required
+                    />
+                    <TextField
+                        label="Email"
+                        type="email"
+                        fullWidth
+                        margin="normal"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                    <TextField
+                        label="Senha"
+                        type="password"
+                        fullWidth
+                        margin="normal"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                        helperText="8+ caracteres, maiúscula, minúscula, número e especial"
+                    />
+                    <Button type="submit" variant="contained" fullWidth sx={{ mt: 3, py: 1.5 }}>
+                        Cadastrar
+                    </Button>
+                    <Box textAlign="center" mt={2}>
+                        <Typography variant="body2" color="text.secondary">
+                            Já tem uma conta?
+                        </Typography>
+                        <Button variant="text" onClick={() => navigate('/login')}>
+                            Realizar login
+                        </Button>
+                    </Box>
+                </form>
+            </Paper>
+        </Box>
+    );
+};
 
 export default Registrar;
