@@ -7,6 +7,7 @@ import Transactions from './pages/Transactions';
 import Transfer from './pages/Transfer';
 import Operations from './pages/Operations';
 import Login from './pages/Login';
+import Registrar from './pages/Registrar';
 import { AuthProvider, useAuth } from './context/AuthContext';
 
 export const ColorModeContext = createContext({ toggleColorMode: () => {} });
@@ -93,6 +94,7 @@ const App = () => {
           <CssBaseline />
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Registrar />} />
             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/transactions" element={<ProtectedRoute><Transactions /></ProtectedRoute>} />
             <Route path="/transfer" element={<ProtectedRoute><Transfer /></ProtectedRoute>} />

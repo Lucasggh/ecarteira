@@ -1,12 +1,14 @@
 import { useState } from 'react';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const { login } = useAuth();
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -57,6 +59,14 @@ const Login = () => {
                     <Button type="submit" variant="contained" fullWidth sx={{ mt: 3, py: 1.5 }}>
                         Login
                     </Button>
+                    <Box textAlign="center" mt={2}>
+                        <Typography variant="body2" color="text.secondary">
+                            Não tem uma conta?
+                        </Typography>
+                        <Button variant="text" onClick={() => navigate('/register')}>
+                            Criar conta
+                        </Button>
+                    </Box>
                 </form>
             </Paper>
         </Box>
