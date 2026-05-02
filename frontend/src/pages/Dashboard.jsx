@@ -35,27 +35,44 @@ const Dashboard = () => {
     if (error) return <Alert severity="error">{error}</Alert>;
 
     // Calculate KPIs properly using user ID
-    const income = transactions.reduce((acc, t) => {
-        const amt = Math.abs(parseFloat(t.amount));
-        if (t.type === 'deposit') return acc + amt;
-        if (t.type === 'transfer' && t.receiver_id === user?.id) return acc + amt;
-        return acc;
-    }, 0);
+    let allTimeIncome = 0;
+    let allTimeExpenses = 0;
+    let recentIncome = 0;
+    let recentExpenses = 0;
 
-    const expenses = transactions.reduce((acc, t) => {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    transactions.forEach(t => {
         const amt = Math.abs(parseFloat(t.amount));
-        if (t.type === 'withdrawn' || t.type === 'withdraw') return acc + amt;
-        if (t.type === 'transfer' && t.sender_id === user?.id) return acc + amt;
-        return acc;
-    }, 0);
+        const isRecent = new Date(t.date) >= sevenDaysAgo;
+        
+        let isIncome = false;
+        let isExpense = false;
+
+        if (t.type === 'deposit') isIncome = true;
+        if (t.type === 'transfer' && t.receiver_id === user?.id) isIncome = true;
+        
+        if (t.type === 'withdrawn' || t.type === 'withdraw') isExpense = true;
+        if (t.type === 'transfer' && t.sender_id === user?.id) isExpense = true;
+
+        if (isIncome) {
+            allTimeIncome += amt;
+            if (isRecent) recentIncome += amt;
+        }
+        if (isExpense) {
+            allTimeExpenses += amt;
+            if (isRecent) recentExpenses += amt;
+        }
+    });
 
     // Calculate balance accurately from transactions to guarantee sync between widgets
-    const calculatedBalance = income - expenses;
+    const calculatedBalance = allTimeIncome - allTimeExpenses;
 
     const kpis = {
-        totalBalance: { value: calculatedBalance, trend: '+0.0%', isPositive: true },
-        income: { value: income, trend: '+0.0%', isPositive: true },
-        expenses: { value: expenses, trend: '-0.0%', isPositive: true },
+        totalBalance: { value: calculatedBalance, trend: 'Saldo Geral', isPositive: true },
+        income: { value: recentIncome, trend: 'Últimos 7 dias', isPositive: true },
+        expenses: { value: recentExpenses, trend: 'Últimos 7 dias', isPositive: false },
         savings: { value: 0, trend: '0.0%', isPositive: true }
     };
 
@@ -69,7 +86,7 @@ const Dashboard = () => {
     // Prepare chart data since backend has no dates
     const realChartData = [
         { name: 'Initial', income: 0, expense: 0 },
-        { name: 'Current', income: income, expense: expenses }
+        { name: 'Current', income: allTimeIncome, expense: allTimeExpenses }
     ];
 
     // Prepare pie chart data (grouped by type)
@@ -103,7 +120,7 @@ const Dashboard = () => {
 
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '2fr 1fr' }, gap: 3, mb: 4 }}>
                 <Box sx={{ minWidth: 0 }}>
-                    <IncomeExpenseChart data={realChartData} />
+                    <IncomeExpenseChart transactions={transactions} userId={user?.id} />
                 </Box>
                 <Box sx={{ minWidth: 0 }}>
                     <CategoryPieChart data={realCategoryData.length > 0 ? realCategoryData : [{ name: 'No Data', value: 1, color: '#ccc' }]} />

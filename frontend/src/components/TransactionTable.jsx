@@ -105,7 +105,16 @@ const TransactionTable = ({ transactions, user }) => {
                                             }}>
                                                 {getCategoryIcon(row.category)}
                                             </Avatar>
-                                            {row.description || row.type}
+                                            <Box display="flex" flexDirection="column">
+                                                <Typography variant="body2" fontWeight={500} sx={{ textTransform: 'capitalize' }}>
+                                                    {row.description || row.type}
+                                                </Typography>
+                                                <Typography variant="caption" color="text.secondary">
+                                                    {row.type === 'deposit' && `Receiver ID: ${row.receiver_id || 'N/A'}`}
+                                                    {(row.type === 'withdrawn' || row.type === 'withdraw') && `Sender ID: ${row.sender_id || 'N/A'}`}
+                                                    {row.type === 'transfer' && `Sender ID: ${row.sender_id || 'N/A'} → Receiver ID: ${row.receiver_id || 'N/A'}`}
+                                                </Typography>
+                                            </Box>
                                         </Box>
                                     </TableCell>
                                     <TableCell sx={{ pl: 0 }}>
