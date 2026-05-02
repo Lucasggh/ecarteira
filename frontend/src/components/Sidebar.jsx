@@ -209,7 +209,6 @@ const Sidebar = () => {
                     bgcolor: theme.palette.background.paper,
                     color: theme.palette.text.primary,
                     borderBottom: theme.palette.mode === 'light' ? '1px solid #e2e8f0' : '1px solid #334155',
-                    zIndex: theme.zIndex.drawer + 1,
                 }}
             >
                 <Toolbar>
