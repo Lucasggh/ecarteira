@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3067/api';
+const API_URL = 'https://ecarteira.onrender.com/api';
 
 export const fetchBalance = async (token) => {
     const res = await fetch(`${API_URL}/transactions/balance`, {
