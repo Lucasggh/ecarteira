@@ -1,106 +1,82 @@
 import {
-  depositModel,
-  balanceModel,
-  withdrawModel,
-  TransferModel,
-  transactionsModel,
+    depositModel,
+    balanceModel,
+    withdrawModel,
+    transferModel,
+    transactionsModel,
+    userExistsModel,
 } from "../models/transactionModel.js";
+import { AppError } from "../utils/AppError.js";
+
+function validateAmount(rawAmount) {
+    const amount = Number(rawAmount);
+    if (isNaN(amount) || !Number.isFinite(amount) || amount <= 0) {
+        throw new AppError("Amount must be a positive number", 400);
+    }
+    return amount;
+}
 
 export async function depositService(payload) {
-  try {
-    if (!/^\d+(\.\d{1,2})?$/.test(payload.amount)) {
-      throw new Error("invalid amount format");
-    }
-    if (!payload.receiver_id || !payload.amount || !payload.type || Number(payload.amount) < 0) {
-      throw new Error("invalid credentials");
+    const amount = validateAmount(payload.amount);
+    if (!payload.receiver_id || !payload.type) {
+        throw new AppError("Missing required fields", 400);
     }
     const deposit = await depositModel({
-      ...payload,
-      amount: String(Math.round(payload.amount * 100)),
+        ...payload,
+        amount: String(Math.round(amount * 100)),
     });
     return deposit;
-  } catch (err) {
-    throw err;
-  }
 }
 
 export async function balanceService(id) {
-  if (!id) {
-    throw new Error("invalid credentials");
-  }
-  const balance = await balanceModel(id);
-  console.log(`service: ${balance}`);
-  return balance / 100;
+    if (!id) throw new AppError("User ID is required", 400);
+    const balance = await balanceModel(id);
+    return Number(balance) / 100;
 }
 
 export async function withdrawnService(payload) {
-  try {
-    if (!/^\d+(\.\d{1,2})?$/.test(payload.amount)) {
-      throw new Error("invalid amount format");
+    const amount = validateAmount(payload.amount);
+    if (!payload.sender_id || !payload.type) {
+        throw new AppError("Missing required fields", 400);
     }
-    if (!payload.sender_id || !payload.amount || !payload.type) {
-      throw new Error("invalid credentials");
-    }
-
     const balanceCents = await balanceModel(payload.sender_id);
-    if (
-      !balanceCents ||
-      balanceCents <= 0 ||
-      Math.round(Number(payload.amount) * 100) > Number(balanceCents)
-    ) {
-      throw new Error("invalid amount");
+    if (Number(balanceCents) <= 0 || Math.round(amount * 100) > Number(balanceCents)) {
+        throw new AppError("Insufficient balance", 422);
     }
-
     const withdrawn = await withdrawModel({
-      ...payload,
-      amount: String(Math.round(payload.amount * 100)),
+        ...payload,
+        amount: String(Math.round(amount * 100)),
     });
     return withdrawn.amount;
-  } catch (err) {
-    throw err;
-  }
 }
 
 export async function transferService(payload) {
-  try {
-    if (!/^\d+(\.\d{1,2})?$/.test(payload.amount)) {
-      throw new Error("invalid amount format");
+    const amount = validateAmount(payload.amount);
+    if (!payload.sender_id || !payload.receiver_id || !payload.type) {
+        throw new AppError("Missing required fields", 400);
     }
-    if (
-      !payload.sender_id ||
-      !payload.receiver_id ||
-      !payload.amount ||
-      !payload.type
-    ) {
-      throw new Error("invalid credentials");
+    if (String(payload.sender_id) === String(payload.receiver_id)) {
+        throw new AppError("Cannot transfer to yourself", 400);
     }
-
+    const receiverExists = await userExistsModel(payload.receiver_id);
+    if (!receiverExists) {
+        throw new AppError("Receiver not found", 404);
+    }
     const balanceCents = await balanceModel(payload.sender_id);
-    if (
-      !balanceCents ||
-      balanceCents <= 0 ||
-      Math.round(Number(payload.amount) * 100) > Number(balanceCents)
-    ) {
-      throw new Error("invalid amount");
+    if (Number(balanceCents) <= 0 || Math.round(amount * 100) > Number(balanceCents)) {
+        throw new AppError("Insufficient balance", 422);
     }
-    const transfer = await TransferModel({
-      ...payload,
-      amount: String(Math.round(payload.amount * 100)),
+    const transfer = await transferModel({
+        ...payload,
+        amount: String(Math.round(amount * 100)),
     });
     return transfer;
-  } catch (err) {
-    throw err;
-  }
 }
 
 export async function transactionsService(id) {
-  try {
     const transactions = await transactionsModel(id);
-    return transactions.map(t => ({
-      ...t,
-      amount: String(Number(t.amount) / 100)
+    return transactions.map((t) => ({
+        ...t,
+        amount: String(Number(t.amount) / 100),
     }));
-  } catch (err) {
-    throw err
-  }
 }

@@ -7,7 +7,7 @@ const Transfer = () => {
     const { token } = useAuth();
     const [receiverId, setReceiverId] = useState('');
     const [amount, setAmount] = useState('');
-    const [classification, setClassification] = useState('Transfer');
+    const [category, setCategory] = useState('Sem Categoria');
     const [message, setMessage] = useState({ type: '', text: '' });
 
     const handleTransfer = async (e) => {
@@ -17,13 +17,14 @@ const Transfer = () => {
             await transfer(token, {
                 receiver_id: receiverId,
                 amount: parseFloat(amount),
+                category,
             });
             setMessage({ type: 'success', text: 'Transfer successful!' });
             setReceiverId('');
             setAmount('');
-            setClassification('Transfer');
+            setCategory('Sem Categoria');
         } catch (err) {
-            setMessage({ type: 'error', text: 'Transfer failed.' });
+            setMessage({ type: 'error', text: err.message || 'Transfer failed.' });
         }
     };
 
@@ -51,7 +52,7 @@ const Transfer = () => {
                     <TextField
                         label="Amount ($)"
                         type="number"
-                        inputProps={{ step: "0.01", min: "0" }}
+                        inputProps={{ step: "0.01", min: "0.01" }}
                         fullWidth
                         margin="normal"
                         value={amount}
@@ -60,22 +61,22 @@ const Transfer = () => {
                     />
                     <TextField
                         select
-                        label="Classification"
+                        label="Category"
                         fullWidth
                         margin="normal"
-                        value={classification}
-                        onChange={(e) => setClassification(e.target.value)}
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
                     >
-                        <MenuItem value="Transfer">General Transfer</MenuItem>
-                        <MenuItem value="Payment">Payment</MenuItem>
-                        <MenuItem value="Gift">Gift</MenuItem>
-                        <MenuItem value="Donation">Donation</MenuItem>
+                        <MenuItem value="Sem Categoria">General Transfer</MenuItem>
+                        <MenuItem value="Pagamento">Payment</MenuItem>
+                        <MenuItem value="Presente">Gift</MenuItem>
+                        <MenuItem value="Doação">Donation</MenuItem>
                     </TextField>
-                    <Button 
-                        type="submit" 
-                        variant="contained" 
-                        color="primary" 
-                        fullWidth 
+                    <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        fullWidth
                         sx={{ mt: 4, py: 1.5, borderRadius: 2, fontWeight: 'bold' }}
                     >
                         Send Transfer

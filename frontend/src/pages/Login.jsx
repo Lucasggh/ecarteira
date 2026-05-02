@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../api';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -14,19 +15,10 @@ const Login = () => {
         e.preventDefault();
         setError('');
         try {
-            const response = await fetch('https://ecarteira.onrender.com/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
-            });
-            const data = await response.json();
-            if (response.ok) {
-                login(data.user, data.token);
-            } else {
-                setError(data.message || data.error || 'Login failed');
-            }
+            const data = await loginUser(email, password);
+            login(data.user, data.token);
         } catch (err) {
-            setError('Error connecting to server');
+            setError(err.message || 'Login failed');
         }
     };
 

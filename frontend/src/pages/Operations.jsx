@@ -14,10 +14,10 @@ const Operations = () => {
         setMessage({ type: '', text: '' });
         try {
             await deposit(token, { amount: parseFloat(depositAmount) });
-            setMessage({ type: 'success', text: 'Deposit successful!' });
+            setMessage({ type: 'success', text: 'Depósito realizado com sucesso!' });
             setDepositAmount('');
         } catch (err) {
-            setMessage({ type: 'error', text: 'Deposit failed.' });
+            setMessage({ type: 'error', text: err.message || 'Falha no depósito.' });
         }
     };
 
@@ -26,10 +26,10 @@ const Operations = () => {
         setMessage({ type: '', text: '' });
         try {
             await withdraw(token, { amount: parseFloat(withdrawAmount) });
-            setMessage({ type: 'success', text: 'Withdrawal successful!' });
+            setMessage({ type: 'success', text: 'Saque realizado com sucesso!' });
             setWithdrawAmount('');
         } catch (err) {
-            setMessage({ type: 'error', text: 'Withdrawal failed.' });
+            setMessage({ type: 'error', text: err.message || 'Falha no saque.' });
         }
     };
 
@@ -53,18 +53,18 @@ const Operations = () => {
                             <TextField
                                 label="Amount ($)"
                                 type="number"
-                                inputProps={{ step: "0.01", min: "0" }}
+                                inputProps={{ step: "0.01", min: "0.01" }}
                                 fullWidth
                                 margin="normal"
                                 value={depositAmount}
                                 onChange={(e) => setDepositAmount(e.target.value)}
                                 required
                             />
-                            <Button 
-                                type="submit" 
-                                variant="contained" 
-                                color="success" 
-                                fullWidth 
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="success"
+                                fullWidth
                                 sx={{ mt: 3, py: 1.5, borderRadius: 2, fontWeight: 'bold' }}
                             >
                                 Confirm Deposit
@@ -81,18 +81,18 @@ const Operations = () => {
                             <TextField
                                 label="Amount ($)"
                                 type="number"
-                                inputProps={{ step: "0.01", min: "0" }}
+                                inputProps={{ step: "0.01", min: "0.01" }}
                                 fullWidth
                                 margin="normal"
                                 value={withdrawAmount}
                                 onChange={(e) => setWithdrawAmount(e.target.value)}
                                 required
                             />
-                            <Button 
-                                type="submit" 
-                                variant="contained" 
-                                color="error" 
-                                fullWidth 
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="error"
+                                fullWidth
                                 sx={{ mt: 3, py: 1.5, borderRadius: 2, fontWeight: 'bold' }}
                             >
                                 Confirm Withdrawal

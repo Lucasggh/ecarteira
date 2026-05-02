@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { Box, Button, TextField, Typography, Paper } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { isValidCPF } from "cnpj-cpf-validator";
-import isEmail from "validator/lib/isEmail";
+import { registerUser } from '../api';
 
 const Registrar = () => {
     const [name, setName] = useState('');
@@ -15,37 +14,11 @@ const Registrar = () => {
     const handleRegister = async (e) => {
         e.preventDefault();
         setError('');
-
-        // Validações locais
-        if (!isValidCPF(cpf)) {
-            setError('CPF inválido');
-            return;
-        }
-        if (!isEmail(email)) {
-            setError('Email inválido');
-            return;
-        }
-        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{8,}$/.test(password)) {
-            setError('A senha deve conter 8+ caracteres, maiúscula, minúscula, número e especial.');
-            return;
-        }
-
         try {
-            const response = await fetch('https://ecarteira.onrender.com/api/auth/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name, email, cpf, password, role: "user" })
-            });
-            const data = await response.json();
-            
-            if (response.ok) {
-                // Redireciona para o login após criar a conta
-                navigate('/login');
-            } else {
-                setError(data.message || data.err || 'Erro ao criar conta');
-            }
+            await registerUser({ name, email, cpf, password });
+            navigate('/login');
         } catch (err) {
-            setError('Erro ao conectar ao servidor');
+            setError(err.message || 'Erro ao criar conta');
         }
     };
 
