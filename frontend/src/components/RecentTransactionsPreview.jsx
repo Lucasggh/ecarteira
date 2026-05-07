@@ -14,12 +14,20 @@ import { useNavigate } from 'react-router-dom';
 // Helper to pick an icon based on category
 const getCategoryIcon = (category) => {
     switch(category) {
-        case 'Food': return <FastfoodIcon />;
-        case 'Housing': return <HomeIcon />;
-        case 'Transport': return <DirectionsCarIcon />;
-        case 'Health': return <FitnessCenterIcon />;
+        case 'Food':
+        case 'Alimentação': return <FastfoodIcon />;
+        case 'Housing':
+        case 'Aluguel': return <HomeIcon />;
+        case 'Transport':
+        case 'Transporte': return <DirectionsCarIcon />;
+        case 'Health':
+        case 'Saúde': return <FitnessCenterIcon />;
         case 'Salary':
         case 'Side Hustle': return <WorkIcon />;
+        case 'Lazer': return <FitnessCenterIcon />; // Using Fitness as proxy for leisure/activities
+        case 'Educação': return <WorkIcon />; // Using Work/Portfolio as proxy for education
+        case 'Depósito': return <AttachMoneyIcon />;
+        case 'Saque': return <AttachMoneyIcon />;
         default: return <ShoppingCartIcon />;
     }
 };
@@ -27,10 +35,16 @@ const getCategoryIcon = (category) => {
 const getCategoryColor = (category, type) => {
     if (type === 'income') return '#e8f5e9'; // light green
     switch(category) {
-        case 'Food': return '#ffebee'; // light red
-        case 'Housing': return '#e3f2fd'; // light blue
-        case 'Transport': return '#e0f7fa'; // cyan
-        case 'Health': return '#fff8e1'; // amber
+        case 'Food':
+        case 'Alimentação': return '#ffebee'; // light red
+        case 'Housing':
+        case 'Aluguel': return '#e3f2fd'; // light blue
+        case 'Transport':
+        case 'Transporte': return '#e0f7fa'; // cyan
+        case 'Health':
+        case 'Saúde': return '#fff8e1'; // amber
+        case 'Depósito': return '#e8f5e9'; // light green
+        case 'Saque': return '#ffebee'; // light red
         default: return '#f5f5f5'; // grey
     }
 };
@@ -38,15 +52,21 @@ const getCategoryColor = (category, type) => {
 const getCategoryIconColor = (category, type) => {
     if (type === 'income') return '#4caf50';
     switch(category) {
-        case 'Food': return '#f44336';
-        case 'Housing': return '#2196f3';
-        case 'Transport': return '#00bcd4';
-        case 'Health': return '#ffc107';
+        case 'Food':
+        case 'Alimentação': return '#f44336';
+        case 'Housing':
+        case 'Aluguel': return '#2196f3';
+        case 'Transport':
+        case 'Transporte': return '#00bcd4';
+        case 'Health':
+        case 'Saúde': return '#ffc107';
+        case 'Depósito': return '#4caf50';
+        case 'Saque': return '#f44336';
         default: return '#9e9e9e';
     }
 };
 
-const RecentTransactionsPreview = ({ transactions }) => {
+const RecentTransactionsPreview = ({ transactions, user }) => {
     const navigate = useNavigate();
     // Only show top 5
     const recentTx = transactions.slice(0, 5);
@@ -78,7 +98,7 @@ const RecentTransactionsPreview = ({ transactions }) => {
             
             <List sx={{ width: '100%', bgcolor: 'background.paper', p: 0, flexGrow: 1 }}>
                 {recentTx.map((tx, index) => {
-                    const isIncome = tx.type === 'income';
+                    const isIncome = tx.type === 'deposit' || (tx.type === 'transfer' && user && tx.receiver_id === user.id);
                     return (
                         <React.Fragment key={tx.id}>
                             <ListItem sx={{ px: 0, py: 1.5 }}>
@@ -92,8 +112,8 @@ const RecentTransactionsPreview = ({ transactions }) => {
                                     </Avatar>
                                 </ListItemAvatar>
                                 <ListItemText 
-                                    primary={<Typography variant="subtitle2" fontWeight="bold">{tx.description}</Typography>} 
-                                    secondary={<Typography variant="caption" color="text.secondary">{new Date(tx.date).toLocaleDateString()} • {tx.category}</Typography>} 
+                                    primary={<Typography variant="subtitle2" fontWeight="bold">{tx.category || tx.type}</Typography>} 
+                                    secondary={<Typography variant="caption" color="text.secondary">{new Date(tx.date).toLocaleDateString()} • {tx.type}</Typography>} 
                                 />
                                 <Typography 
                                     variant="subtitle2" 

@@ -1,10 +1,10 @@
 import pool from "../database/db.js";
 import { AppError } from "../utils/AppError.js";
 
-export async function depositModel({ receiver_id, amount, type }) {
+export async function depositModel({ receiver_id, amount, type, category }) {
     const res = await pool.query(
-        "INSERT INTO transactions (receiver_id,amount,type) VALUES($1,$2,$3) RETURNING *",
-        [receiver_id, amount, type]
+        "INSERT INTO transactions (receiver_id,amount,type,category) VALUES($1,$2,$3,$4) RETURNING *",
+        [receiver_id, amount, type, category || "Depósito"]
     );
     return res.rows[0];
 }
@@ -17,10 +17,10 @@ export async function balanceModel(id) {
     return res.rows[0].balance;
 }
 
-export async function withdrawModel({ sender_id, amount, type }) {
+export async function withdrawModel({ sender_id, amount, type, category }) {
     const res = await pool.query(
-        "INSERT INTO transactions (sender_id,amount,type) VALUES($1,$2,$3) RETURNING *",
-        [sender_id, amount, type]
+        "INSERT INTO transactions (sender_id,amount,type,category) VALUES($1,$2,$3,$4) RETURNING *",
+        [sender_id, amount, type, category || "Saque"]
     );
     return res.rows[0];
 }

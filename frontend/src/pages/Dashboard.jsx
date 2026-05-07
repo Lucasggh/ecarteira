@@ -129,7 +129,7 @@ const Dashboard = () => {
 
             <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', lg: '2fr 1fr' }, gap: 3 }}>
                 <Box sx={{ minWidth: 0 }}>
-                    <RecentTransactionsPreview transactions={transactions} />
+                    <RecentTransactionsPreview transactions={transactions} user={user} />
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3, minWidth: 0 }}>
                     <Typography variant="h6" fontWeight="bold">

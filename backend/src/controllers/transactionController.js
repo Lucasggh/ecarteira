@@ -20,6 +20,7 @@ export async function depositController(req, res) {
             receiver_id: req.userId,
             amount: req.body.amount,
             type: "deposit",
+            category: req.body.category || "Depósito",
         };
         const depositRes = await depositService(payload);
         res.status(201).json({
@@ -51,6 +52,7 @@ export async function withdrawController(req, res) {
             sender_id: req.userId,
             amount: req.body.amount,
             type: "withdrawn",
+            category: req.body.category || "Saque",
         };
         const withdrawn = await withdrawnService(payload);
         res.status(200).json({

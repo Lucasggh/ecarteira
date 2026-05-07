@@ -75,8 +75,16 @@ export async function transferService(payload) {
 
 export async function transactionsService(id) {
     const transactions = await transactionsModel(id);
-    return transactions.map((t) => ({
-        ...t,
-        amount: String(Number(t.amount) / 100),
-    }));
+    return transactions.map((t) => {
+        let category = t.category;
+        if (!category || category === "Sem Categoria") {
+            if (t.type === "deposit") category = "Depósito";
+            else if (t.type === "withdrawn" || t.type === "withdraw") category = "Saque";
+        }
+        return {
+            ...t,
+            category,
+            amount: String(Number(t.amount) / 100),
+        };
+    });
 }

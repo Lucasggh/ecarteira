@@ -9,16 +9,25 @@ import HomeIcon from '@mui/icons-material/Home';
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
 import WorkIcon from '@mui/icons-material/Work';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 
 // Helper to pick an icon based on category
 const getCategoryIcon = (category) => {
     switch(category) {
-        case 'Food': return <FastfoodIcon fontSize="small" />;
-        case 'Housing': return <HomeIcon fontSize="small"  />;
-        case 'Transport': return <DirectionsCarIcon fontSize="small" />;
-        case 'Health': return <FitnessCenterIcon fontSize="small" />;
+        case 'Food':
+        case 'Alimentação': return <FastfoodIcon fontSize="small" />;
+        case 'Housing':
+        case 'Aluguel': return <HomeIcon fontSize="small"  />;
+        case 'Transport':
+        case 'Transporte': return <DirectionsCarIcon fontSize="small" />;
+        case 'Health':
+        case 'Saúde': return <FitnessCenterIcon fontSize="small" />;
         case 'Salary':
         case 'Side Hustle': return <WorkIcon fontSize="small" />;
+        case 'Lazer': return <FitnessCenterIcon fontSize="small" />;
+        case 'Educação': return <WorkIcon fontSize="small" />;
+        case 'Depósito': return <AttachMoneyIcon fontSize="small" />;
+        case 'Saque': return <AttachMoneyIcon fontSize="small" />;
         default: return <ShoppingCartIcon fontSize="small" />;
     }
 };
@@ -26,10 +35,16 @@ const getCategoryIcon = (category) => {
 const getCategoryColor = (category, type) => {
     if (type === 'income') return '#e8f5e9';
     switch(category) {
-        case 'Food': return '#ffebee';
-        case 'Housing': return '#e3f2fd';
-        case 'Transport': return '#e0f7fa';
-        case 'Health': return '#fff8e1';
+        case 'Food':
+        case 'Alimentação': return '#ffebee';
+        case 'Housing':
+        case 'Aluguel': return '#e3f2fd';
+        case 'Transport':
+        case 'Transporte': return '#e0f7fa';
+        case 'Health':
+        case 'Saúde': return '#fff8e1';
+        case 'Depósito': return '#e8f5e9';
+        case 'Saque': return '#ffebee';
         default: return '#f5f5f5';
     }
 };
@@ -37,10 +52,16 @@ const getCategoryColor = (category, type) => {
 const getCategoryIconColor = (category, type) => {
     if (type === 'income') return '#4caf50';
     switch(category) {
-        case 'Food': return '#f44336';
-        case 'Housing': return '#2196f3';
-        case 'Transport': return '#00bcd4';
-        case 'Health': return '#ffc107';
+        case 'Food':
+        case 'Alimentação': return '#f44336';
+        case 'Housing':
+        case 'Aluguel': return '#2196f3';
+        case 'Transport':
+        case 'Transporte': return '#00bcd4';
+        case 'Health':
+        case 'Saúde': return '#ffc107';
+        case 'Depósito': return '#4caf50';
+        case 'Saque': return '#f44336';
         default: return '#9e9e9e';
     }
 };
@@ -107,7 +128,7 @@ const TransactionTable = ({ transactions, user }) => {
                                             </Avatar>
                                             <Box display="flex" flexDirection="column">
                                                 <Typography variant="body2" fontWeight={500} sx={{ textTransform: 'capitalize' }}>
-                                                    {row.description || row.type}
+                                                    {row.category || row.type}
                                                 </Typography>
                                                 <Typography variant="caption" color="text.secondary">
                                                     {row.type === 'deposit' && `Receiver ID: ${row.receiver_id || 'N/A'}`}

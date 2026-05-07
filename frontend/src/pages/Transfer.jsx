@@ -71,6 +71,12 @@ const Transfer = () => {
                         <MenuItem value="Pagamento">Payment</MenuItem>
                         <MenuItem value="Presente">Gift</MenuItem>
                         <MenuItem value="Doação">Donation</MenuItem>
+                        <MenuItem value="Aluguel">Rent / Aluguel</MenuItem>
+                        <MenuItem value="Alimentação">Food / Alimentação</MenuItem>
+                        <MenuItem value="Lazer">Leisure / Lazer</MenuItem>
+                        <MenuItem value="Saúde">Health / Saúde</MenuItem>
+                        <MenuItem value="Educação">Education / Educação</MenuItem>
+                        <MenuItem value="Transporte">Transport / Transporte</MenuItem>
                     </TextField>
                     <Button
                         type="submit"

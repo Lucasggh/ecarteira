@@ -163,7 +163,7 @@ const SidebarContent = ({ onClose }) => {
                         {user?.name || 'Usuário'}
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                        Pro Plan
+                        ID: {user?.id || 'N/A'}
                     </Typography>
                 </Box>
             </Box>
